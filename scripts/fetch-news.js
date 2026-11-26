@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import fetch from 'node-fetch'
+import WebSocket from 'ws'
 import { spawn } from 'node:child_process'
 import { writeFile, unlink } from 'node:fs/promises'
 import os from 'node:os'
@@ -8,7 +9,11 @@ import { fileURLToPath } from 'node:url'
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
+  process.env.SUPABASE_SERVICE_KEY,
+  // Node 20 belum punya WebSocket bawaan, sedangkan supabase-js terbaru
+  // memerlukannya saat membuat client (untuk modul realtime yang tidak
+  // kita pakai). Paket `ws` dipasang sebagai transport agar tidak crash.
+  { realtime: { transport: WebSocket } }
 )
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url))
