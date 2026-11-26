@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import fetch from 'node-fetch'
 import WebSocket from 'ws'
+import { ambilSemuaRss } from './rss.js'
 import { spawn } from 'node:child_process'
 import { writeFile, unlink } from 'node:fs/promises'
 import os from 'node:os'
@@ -76,18 +77,31 @@ async function fetchNews() {
     const data = await response.json()
 
     if (!data.articles || data.articles.length === 0) {
-      console.log('⚠️  No articles found')
-      return
+      console.log('⚠️  GNews kosong untuk run ini; lanjut dengan RSS saja')
+      data.articles = []
     }
 
     console.log(`📰 Found ${data.articles.length} articles for Santra Berita`)
+
+    // Sumber kedua: RSS resmi langsung dari medianya. Setiap feed adalah
+    // klaster independen, jadi cerita yang sama di GNews dan RSS (atau di
+    // dua feed berbeda) bisa saling menguatkan di gerbang verifikasi.
+    const rssArticles = await ambilSemuaRss()
+    const terlihat = new Set()
+    const semuaArtikel = []
+    for (const a of [...data.articles, ...rssArticles]) {
+      if (!a.url || terlihat.has(a.url)) continue
+      terlihat.add(a.url)
+      semuaArtikel.push(a)
+    }
+    console.log(`📰 Kolam gabungan: ${semuaArtikel.length} artikel (GNews ${data.articles.length} + RSS ${rssArticles.length}, sesudah buang duplikat URL)`)
 
     // Gerbang verifikasi: nilai dulu, simpan belakangan.
     // Bila mesin verifikasi gagal jalan, semua artikel ditandai CELAH
     // (tertahan, tidak tayang) — gagal secara aman, bukan lolos diam-diam.
     let perArtikel = {}
     try {
-      perArtikel = await jalankanVerifikasi(data.articles)
+      perArtikel = await jalankanVerifikasi(semuaArtikel)
       console.log('🛡️  Verifikasi selesai')
     } catch (e) {
       console.error(`⚠️  Mesin verifikasi gagal (${e.message}); semua artikel ditandai CELAH`)
@@ -96,7 +110,7 @@ async function fetchNews() {
     const sekarang = new Date().toISOString()
 
     // Transform data untuk Supabase (kolom lama + kolom verifikasi)
-    const articles = data.articles.map(article => {
+    const articles = semuaArtikel.map(article => {
       const v = perArtikel[article.url]
       return {
         title: article.title,
