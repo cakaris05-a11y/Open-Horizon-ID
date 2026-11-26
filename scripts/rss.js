@@ -1,4 +1,4 @@
-// Pengambil RSS resmi untuk Sentra Berita.
+// Pengambil RSS resmi untuk Open Horizon ID.
 //
 // Setiap feed di scripts/sumber-rss.json adalah satu klaster sumber
 // independen untuk gerbang verifikasi (scripts/verifikasi.py): cerita

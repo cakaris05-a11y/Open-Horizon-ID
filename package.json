@@ -1,7 +1,7 @@
 {
-  "name": "santraberita-auto-fetcher",
+  "name": "openhorizonid-auto-fetcher",
   "version": "1.0.0",
-  "description": "Auto fetch berita untuk Santra Berita",
+  "description": "Auto fetch berita untuk Open Horizon ID",
   "type": "module",
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",

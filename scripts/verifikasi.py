@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Mesin verifikasi inti Sentra Berita (implementasi acuan Protokol v1.0).
+"""Mesin verifikasi inti Open Horizon ID (implementasi acuan Protokol v1.0).
 
 Membaca daftar kandidat kabar (JSON), lalu menerapkan:
   - pengelompokan peristiwa: dari bidang "peristiwa" bila ada, atau dari

@@ -27,7 +27,7 @@ function domainDari(urlStr) {
   }
 }
 
-// Jalankan mesin verifikasi dari repo sentra-berita-verifikasi
+// Jalankan mesin verifikasi dari repo open-horizon-id-verifikasi
 // (salinan terkendali: scripts/verifikasi.py + config/sumber-terpercaya.json).
 // Mengembalikan peta url -> {status, jumlah_klaster}, atau null bila gagal.
 async function jalankanVerifikasi(articles) {
@@ -39,7 +39,7 @@ async function jalankanVerifikasi(articles) {
     klaster: null
   }))
 
-  const tmpFile = path.join(os.tmpdir(), `sentra-kandidat-${process.pid}.json`)
+  const tmpFile = path.join(os.tmpdir(), `openhorizonid-kandidat-${process.pid}.json`)
   await writeFile(tmpFile, JSON.stringify(kandidat))
 
   try {
@@ -63,7 +63,7 @@ async function jalankanVerifikasi(articles) {
 
 async function fetchNews() {
   try {
-    console.log('🔍 Fetching news from GNews for Santra Berita...')
+    console.log('🔍 Fetching news from GNews for Open Horizon ID...')
 
     // Fetch dari GNews API
     const response = await fetch(
@@ -81,7 +81,7 @@ async function fetchNews() {
       data.articles = []
     }
 
-    console.log(`📰 Found ${data.articles.length} articles for Santra Berita`)
+    console.log(`📰 Found ${data.articles.length} articles for Open Horizon ID`)
 
     // Sumber kedua: RSS resmi langsung dari medianya. Setiap feed adalah
     // klaster independen, jadi cerita yang sama di GNews dan RSS (atau di
@@ -161,7 +161,7 @@ async function fetchNews() {
       process.exit(1)
     }
 
-    console.log(`✅ Successfully inserted ${inserted?.length || articles.length} articles to Santra Berita database`)
+    console.log(`✅ Successfully inserted ${inserted?.length || articles.length} articles to Open Horizon ID database`)
 
   } catch (error) {
     console.error('❌ Error:', error.message)

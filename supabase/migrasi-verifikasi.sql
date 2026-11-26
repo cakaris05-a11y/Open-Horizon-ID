@@ -1,4 +1,4 @@
--- Migrasi gerbang verifikasi Sentra Berita (JALANKAN SEKALI SAJA)
+-- Migrasi gerbang verifikasi Open Horizon ID (JALANKAN SEKALI SAJA)
 -- Cara: buka Supabase Dashboard > SQL Editor > tempel seluruh berkas ini > Run.
 --
 -- Menambah kolom status verifikasi ke tabel articles. Nilai bawaan 'CELAH'
